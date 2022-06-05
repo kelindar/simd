@@ -3,7 +3,6 @@
 <br>
 <img src="https://img.shields.io/github/go-mod/go-version/kelindar/simd" alt="Go Version">
 <a href="https://pkg.go.dev/github.com/kelindar/simd"><img src="https://pkg.go.dev/badge/github.com/kelindar/simd" alt="PkgGoDev"></a>
-<a href="https://goreportcard.com/report/github.com/kelindar/simd"><img src="https://goreportcard.com/badge/github.com/kelindar/simd" alt="Go Report Card"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
 <a href="https://coveralls.io/github/kelindar/simd"><img src="https://coveralls.io/repos/github/kelindar/simd/badge.svg" alt="Coverage"></a>
 </p>
