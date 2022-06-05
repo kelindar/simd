@@ -24,7 +24,7 @@ type Result struct {
 func makeVector[T number](count int) []T {
 	arr := make([]T, count)
 	for i := 0; i < count; i++ {
-		arr[i] = T(i + 1)
+		arr[i] = T((i % 100) + 1)
 	}
 	return arr
 }

@@ -10,13 +10,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+
 // ---------------------------------- Benchmark Uint8 ----------------------------------
 
 func BenchmarkUint8(b *testing.B) {
 	result := make([]Result, 0, 64)
 
 	typ := "uint8"
-	for _, count := range []int{100} {
+	for _, count := range []int{256, 4096, 16384} {
 		vector := makeVector[uint8](count)
 		result = append(result, runBenchmark(b, typ, "sum", count, func(b *testing.B) {
 			result := uint8(0)
@@ -148,7 +149,7 @@ func TestUint8_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Uint8 ----------------------------------
 
 func TestUint8_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -345,7 +346,7 @@ func TestUint16_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Uint16 ----------------------------------
 
 func TestUint16_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -542,7 +543,7 @@ func TestUint32_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Uint32 ----------------------------------
 
 func TestUint32_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -739,7 +740,7 @@ func TestUint64_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Uint64 ----------------------------------
 
 func TestUint64_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -804,7 +805,7 @@ func BenchmarkInt8(b *testing.B) {
 	result := make([]Result, 0, 64)
 
 	typ := "int8"
-	for _, count := range []int{100} {
+	for _, count := range []int{256, 4096, 16384} {
 		vector := makeVector[int8](count)
 		result = append(result, runBenchmark(b, typ, "sum", count, func(b *testing.B) {
 			result := int8(0)
@@ -936,7 +937,7 @@ func TestInt8_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Int8 ----------------------------------
 
 func TestInt8_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -1133,7 +1134,7 @@ func TestInt16_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Int16 ----------------------------------
 
 func TestInt16_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -1330,7 +1331,7 @@ func TestInt32_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Int32 ----------------------------------
 
 func TestInt32_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -1527,7 +1528,7 @@ func TestInt64_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Int64 ----------------------------------
 
 func TestInt64_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -1724,7 +1725,7 @@ func TestFloat32_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Float32 ----------------------------------
 
 func TestFloat32_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -1921,7 +1922,7 @@ func TestFloat64_Ops(t *testing.T) {
 // ---------------------------------- Test Fallback Float64 ----------------------------------
 
 func TestFloat64_Fallback_Sum(t *testing.T) {
-	defer func(v bool) {
+	defer func(v bool){
 		avx2 = v
 	}(avx2)
 	avx2 = false
@@ -1979,3 +1980,4 @@ func TestFloat64_Fallback_Sum(t *testing.T) {
 		assert.InDeltaSlice(t, expect, result, 0.01)
 	}
 }
+
