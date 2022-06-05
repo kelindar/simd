@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // Result represents a result of a benchmark
@@ -73,4 +75,46 @@ func setMode(mode string) {
 	case "base":
 		avx2 = false
 	}
+}
+
+func TestSum(t *testing.T) {
+	assert.Equal(t, 3, int(Sum([]int8{1, 2})))
+	assert.Equal(t, 3, int(Sum([]int16{1, 2})))
+	assert.Equal(t, 3, int(Sum([]int32{1, 2})))
+	assert.Equal(t, 3, int(Sum([]int64{1, 2})))
+	assert.Equal(t, 3, int(Sum([]uint8{1, 2})))
+	assert.Equal(t, 3, int(Sum([]uint16{1, 2})))
+	assert.Equal(t, 3, int(Sum([]uint32{1, 2})))
+	assert.Equal(t, 3, int(Sum([]uint64{1, 2})))
+	assert.Equal(t, 3, int(Sum([]float32{1, 2})))
+	assert.Equal(t, 3, int(Sum([]float64{1, 2})))
+	assert.Equal(t, 3, int(Sum([]int{1, 2})))
+}
+
+func TestMin(t *testing.T) {
+	assert.Equal(t, 1, int(Min([]int8{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]int16{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]int32{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]int64{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]uint8{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]uint16{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]uint32{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]uint64{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]float32{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]float64{3, 1, 2})))
+	assert.Equal(t, 1, int(Min([]int{3, 1, 2})))
+}
+
+func TestMax(t *testing.T) {
+	assert.Equal(t, 2, int(Max([]int8{1, 2})))
+	assert.Equal(t, 2, int(Max([]int16{1, 2})))
+	assert.Equal(t, 2, int(Max([]int32{1, 2})))
+	assert.Equal(t, 2, int(Max([]int64{1, 2})))
+	assert.Equal(t, 2, int(Max([]uint8{1, 2})))
+	assert.Equal(t, 2, int(Max([]uint16{1, 2})))
+	assert.Equal(t, 2, int(Max([]uint32{1, 2})))
+	assert.Equal(t, 2, int(Max([]uint64{1, 2})))
+	assert.Equal(t, 2, int(Max([]float32{1, 2})))
+	assert.Equal(t, 2, int(Max([]float64{1, 2})))
+	assert.Equal(t, 2, int(Max([]int{1, 2})))
 }
