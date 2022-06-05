@@ -21,7 +21,7 @@ type Result struct {
 }
 
 // makeVector generates a test vector
-func makeVector[T number](count int) []T {
+func makeVector[T Number](count int) []T {
 	arr := make([]T, count)
 	for i := 0; i < count; i++ {
 		arr[i] = T((i % 100) + 1)
