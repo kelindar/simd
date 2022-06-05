@@ -233,3 +233,7 @@ float64   div   16384  7063.43 ns/op    2.00x
   int64   div   16384 98294.20 ns/op    1.15x
 
 ```
+
+# Acknowledgements
+
+This library was originally inspired by the work of Valery Carey & Adrian Witas in [viant/vec](https://github.com/viant/vec) package, but instead of hand-rolled assembly and intrinsics I opted for using auto-vectorization for maintainability reasons.
