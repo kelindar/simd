@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// ---------------------------------- Uint8 ----------------------------------
+// ---------------------------------- Benchmark Uint8 ----------------------------------
 
 func BenchmarkUint8(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -88,60 +88,126 @@ func BenchmarkUint8(b *testing.B) {
 	}
 }
 
-func TestUint8_Sum(t *testing.T) {
-	input := makeVector[uint8](70)
-	expect := sum(input)
-	result := SumUint8s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Uint8 ----------------------------------
+
+func TestUint8_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[uint8](70)
+		expect := sum(input)
+		result := SumUint8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint8](70)
+		expect := min(input)
+		result := MinUint8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint8](70)
+		expect := max(input)
+		result := MaxUint8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := add(make([]uint8, 70), input1, input2)
+		result := AddUint8s(make([]uint8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := sub(make([]uint8, 70), input1, input2)
+		result := SubUint8s(make([]uint8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := mul(make([]uint8, 70), input1, input2)
+		result := MulUint8s(make([]uint8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := div(make([]uint8, 70), input1, input2)
+		result := DivUint8s(make([]uint8, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint8_Min(t *testing.T) {
-	input := makeVector[uint8](70)
-	expect := min(input)
-	result := MinUint8s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Uint8 ----------------------------------
+
+func TestUint8_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[uint8](70)
+		expect := sum(input)
+		result := SumUint8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint8](70)
+		expect := min(input)
+		result := MinUint8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint8](70)
+		expect := max(input)
+		result := MaxUint8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := add(make([]uint8, 70), input1, input2)
+		result := AddUint8s(make([]uint8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := sub(make([]uint8, 70), input1, input2)
+		result := SubUint8s(make([]uint8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := mul(make([]uint8, 70), input1, input2)
+		result := MulUint8s(make([]uint8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint8](70)
+		input2 := makeVector[uint8](70)
+		expect := div(make([]uint8, 70), input1, input2)
+		result := DivUint8s(make([]uint8, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint8_Max(t *testing.T) {
-	input := makeVector[uint8](70)
-	expect := max(input)
-	result := MaxUint8s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint8_Add(t *testing.T) {
-	input1 := makeVector[uint8](70)
-	input2 := makeVector[uint8](70)
-	expect := add(make([]uint8, 70), input1, input2)
-	result := AddUint8s(make([]uint8, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint8_Sub(t *testing.T) {
-	input1 := makeVector[uint8](70)
-	input2 := makeVector[uint8](70)
-	expect := sub(make([]uint8, 70), input1, input2)
-	result := SubUint8s(make([]uint8, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint8_Mul(t *testing.T) {
-	input1 := makeVector[uint8](70)
-	input2 := makeVector[uint8](70)
-	expect := mul(make([]uint8, 70), input1, input2)
-	result := MulUint8s(make([]uint8, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint8_Div(t *testing.T) {
-	input1 := makeVector[uint8](70)
-	input2 := makeVector[uint8](70)
-	expect := div(make([]uint8, 70), input1, input2)
-	result := DivUint8s(make([]uint8, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Uint16 ----------------------------------
+// ---------------------------------- Benchmark Uint16 ----------------------------------
 
 func BenchmarkUint16(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -219,60 +285,126 @@ func BenchmarkUint16(b *testing.B) {
 	}
 }
 
-func TestUint16_Sum(t *testing.T) {
-	input := makeVector[uint16](70)
-	expect := sum(input)
-	result := SumUint16s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Uint16 ----------------------------------
+
+func TestUint16_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[uint16](70)
+		expect := sum(input)
+		result := SumUint16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint16](70)
+		expect := min(input)
+		result := MinUint16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint16](70)
+		expect := max(input)
+		result := MaxUint16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := add(make([]uint16, 70), input1, input2)
+		result := AddUint16s(make([]uint16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := sub(make([]uint16, 70), input1, input2)
+		result := SubUint16s(make([]uint16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := mul(make([]uint16, 70), input1, input2)
+		result := MulUint16s(make([]uint16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := div(make([]uint16, 70), input1, input2)
+		result := DivUint16s(make([]uint16, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint16_Min(t *testing.T) {
-	input := makeVector[uint16](70)
-	expect := min(input)
-	result := MinUint16s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Uint16 ----------------------------------
+
+func TestUint16_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[uint16](70)
+		expect := sum(input)
+		result := SumUint16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint16](70)
+		expect := min(input)
+		result := MinUint16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint16](70)
+		expect := max(input)
+		result := MaxUint16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := add(make([]uint16, 70), input1, input2)
+		result := AddUint16s(make([]uint16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := sub(make([]uint16, 70), input1, input2)
+		result := SubUint16s(make([]uint16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := mul(make([]uint16, 70), input1, input2)
+		result := MulUint16s(make([]uint16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint16](70)
+		input2 := makeVector[uint16](70)
+		expect := div(make([]uint16, 70), input1, input2)
+		result := DivUint16s(make([]uint16, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint16_Max(t *testing.T) {
-	input := makeVector[uint16](70)
-	expect := max(input)
-	result := MaxUint16s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint16_Add(t *testing.T) {
-	input1 := makeVector[uint16](70)
-	input2 := makeVector[uint16](70)
-	expect := add(make([]uint16, 70), input1, input2)
-	result := AddUint16s(make([]uint16, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint16_Sub(t *testing.T) {
-	input1 := makeVector[uint16](70)
-	input2 := makeVector[uint16](70)
-	expect := sub(make([]uint16, 70), input1, input2)
-	result := SubUint16s(make([]uint16, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint16_Mul(t *testing.T) {
-	input1 := makeVector[uint16](70)
-	input2 := makeVector[uint16](70)
-	expect := mul(make([]uint16, 70), input1, input2)
-	result := MulUint16s(make([]uint16, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint16_Div(t *testing.T) {
-	input1 := makeVector[uint16](70)
-	input2 := makeVector[uint16](70)
-	expect := div(make([]uint16, 70), input1, input2)
-	result := DivUint16s(make([]uint16, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Uint32 ----------------------------------
+// ---------------------------------- Benchmark Uint32 ----------------------------------
 
 func BenchmarkUint32(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -350,60 +482,126 @@ func BenchmarkUint32(b *testing.B) {
 	}
 }
 
-func TestUint32_Sum(t *testing.T) {
-	input := makeVector[uint32](70)
-	expect := sum(input)
-	result := SumUint32s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Uint32 ----------------------------------
+
+func TestUint32_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[uint32](70)
+		expect := sum(input)
+		result := SumUint32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint32](70)
+		expect := min(input)
+		result := MinUint32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint32](70)
+		expect := max(input)
+		result := MaxUint32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := add(make([]uint32, 70), input1, input2)
+		result := AddUint32s(make([]uint32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := sub(make([]uint32, 70), input1, input2)
+		result := SubUint32s(make([]uint32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := mul(make([]uint32, 70), input1, input2)
+		result := MulUint32s(make([]uint32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := div(make([]uint32, 70), input1, input2)
+		result := DivUint32s(make([]uint32, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint32_Min(t *testing.T) {
-	input := makeVector[uint32](70)
-	expect := min(input)
-	result := MinUint32s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Uint32 ----------------------------------
+
+func TestUint32_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[uint32](70)
+		expect := sum(input)
+		result := SumUint32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint32](70)
+		expect := min(input)
+		result := MinUint32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint32](70)
+		expect := max(input)
+		result := MaxUint32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := add(make([]uint32, 70), input1, input2)
+		result := AddUint32s(make([]uint32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := sub(make([]uint32, 70), input1, input2)
+		result := SubUint32s(make([]uint32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := mul(make([]uint32, 70), input1, input2)
+		result := MulUint32s(make([]uint32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint32](70)
+		input2 := makeVector[uint32](70)
+		expect := div(make([]uint32, 70), input1, input2)
+		result := DivUint32s(make([]uint32, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint32_Max(t *testing.T) {
-	input := makeVector[uint32](70)
-	expect := max(input)
-	result := MaxUint32s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint32_Add(t *testing.T) {
-	input1 := makeVector[uint32](70)
-	input2 := makeVector[uint32](70)
-	expect := add(make([]uint32, 70), input1, input2)
-	result := AddUint32s(make([]uint32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint32_Sub(t *testing.T) {
-	input1 := makeVector[uint32](70)
-	input2 := makeVector[uint32](70)
-	expect := sub(make([]uint32, 70), input1, input2)
-	result := SubUint32s(make([]uint32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint32_Mul(t *testing.T) {
-	input1 := makeVector[uint32](70)
-	input2 := makeVector[uint32](70)
-	expect := mul(make([]uint32, 70), input1, input2)
-	result := MulUint32s(make([]uint32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint32_Div(t *testing.T) {
-	input1 := makeVector[uint32](70)
-	input2 := makeVector[uint32](70)
-	expect := div(make([]uint32, 70), input1, input2)
-	result := DivUint32s(make([]uint32, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Uint64 ----------------------------------
+// ---------------------------------- Benchmark Uint64 ----------------------------------
 
 func BenchmarkUint64(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -481,60 +679,126 @@ func BenchmarkUint64(b *testing.B) {
 	}
 }
 
-func TestUint64_Sum(t *testing.T) {
-	input := makeVector[uint64](70)
-	expect := sum(input)
-	result := SumUint64s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Uint64 ----------------------------------
+
+func TestUint64_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[uint64](70)
+		expect := sum(input)
+		result := SumUint64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint64](70)
+		expect := min(input)
+		result := MinUint64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint64](70)
+		expect := max(input)
+		result := MaxUint64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := add(make([]uint64, 70), input1, input2)
+		result := AddUint64s(make([]uint64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := sub(make([]uint64, 70), input1, input2)
+		result := SubUint64s(make([]uint64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := mul(make([]uint64, 70), input1, input2)
+		result := MulUint64s(make([]uint64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := div(make([]uint64, 70), input1, input2)
+		result := DivUint64s(make([]uint64, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint64_Min(t *testing.T) {
-	input := makeVector[uint64](70)
-	expect := min(input)
-	result := MinUint64s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Uint64 ----------------------------------
+
+func TestUint64_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[uint64](70)
+		expect := sum(input)
+		result := SumUint64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[uint64](70)
+		expect := min(input)
+		result := MinUint64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[uint64](70)
+		expect := max(input)
+		result := MaxUint64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := add(make([]uint64, 70), input1, input2)
+		result := AddUint64s(make([]uint64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := sub(make([]uint64, 70), input1, input2)
+		result := SubUint64s(make([]uint64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := mul(make([]uint64, 70), input1, input2)
+		result := MulUint64s(make([]uint64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[uint64](70)
+		input2 := makeVector[uint64](70)
+		expect := div(make([]uint64, 70), input1, input2)
+		result := DivUint64s(make([]uint64, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestUint64_Max(t *testing.T) {
-	input := makeVector[uint64](70)
-	expect := max(input)
-	result := MaxUint64s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint64_Add(t *testing.T) {
-	input1 := makeVector[uint64](70)
-	input2 := makeVector[uint64](70)
-	expect := add(make([]uint64, 70), input1, input2)
-	result := AddUint64s(make([]uint64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint64_Sub(t *testing.T) {
-	input1 := makeVector[uint64](70)
-	input2 := makeVector[uint64](70)
-	expect := sub(make([]uint64, 70), input1, input2)
-	result := SubUint64s(make([]uint64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint64_Mul(t *testing.T) {
-	input1 := makeVector[uint64](70)
-	input2 := makeVector[uint64](70)
-	expect := mul(make([]uint64, 70), input1, input2)
-	result := MulUint64s(make([]uint64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestUint64_Div(t *testing.T) {
-	input1 := makeVector[uint64](70)
-	input2 := makeVector[uint64](70)
-	expect := div(make([]uint64, 70), input1, input2)
-	result := DivUint64s(make([]uint64, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Int8 ----------------------------------
+// ---------------------------------- Benchmark Int8 ----------------------------------
 
 func BenchmarkInt8(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -612,60 +876,126 @@ func BenchmarkInt8(b *testing.B) {
 	}
 }
 
-func TestInt8_Sum(t *testing.T) {
-	input := makeVector[int8](70)
-	expect := sum(input)
-	result := SumInt8s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Int8 ----------------------------------
+
+func TestInt8_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[int8](70)
+		expect := sum(input)
+		result := SumInt8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int8](70)
+		expect := min(input)
+		result := MinInt8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int8](70)
+		expect := max(input)
+		result := MaxInt8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := add(make([]int8, 70), input1, input2)
+		result := AddInt8s(make([]int8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := sub(make([]int8, 70), input1, input2)
+		result := SubInt8s(make([]int8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := mul(make([]int8, 70), input1, input2)
+		result := MulInt8s(make([]int8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := div(make([]int8, 70), input1, input2)
+		result := DivInt8s(make([]int8, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt8_Min(t *testing.T) {
-	input := makeVector[int8](70)
-	expect := min(input)
-	result := MinInt8s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Int8 ----------------------------------
+
+func TestInt8_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[int8](70)
+		expect := sum(input)
+		result := SumInt8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int8](70)
+		expect := min(input)
+		result := MinInt8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int8](70)
+		expect := max(input)
+		result := MaxInt8s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := add(make([]int8, 70), input1, input2)
+		result := AddInt8s(make([]int8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := sub(make([]int8, 70), input1, input2)
+		result := SubInt8s(make([]int8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := mul(make([]int8, 70), input1, input2)
+		result := MulInt8s(make([]int8, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int8](70)
+		input2 := makeVector[int8](70)
+		expect := div(make([]int8, 70), input1, input2)
+		result := DivInt8s(make([]int8, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt8_Max(t *testing.T) {
-	input := makeVector[int8](70)
-	expect := max(input)
-	result := MaxInt8s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt8_Add(t *testing.T) {
-	input1 := makeVector[int8](70)
-	input2 := makeVector[int8](70)
-	expect := add(make([]int8, 70), input1, input2)
-	result := AddInt8s(make([]int8, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt8_Sub(t *testing.T) {
-	input1 := makeVector[int8](70)
-	input2 := makeVector[int8](70)
-	expect := sub(make([]int8, 70), input1, input2)
-	result := SubInt8s(make([]int8, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt8_Mul(t *testing.T) {
-	input1 := makeVector[int8](70)
-	input2 := makeVector[int8](70)
-	expect := mul(make([]int8, 70), input1, input2)
-	result := MulInt8s(make([]int8, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt8_Div(t *testing.T) {
-	input1 := makeVector[int8](70)
-	input2 := makeVector[int8](70)
-	expect := div(make([]int8, 70), input1, input2)
-	result := DivInt8s(make([]int8, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Int16 ----------------------------------
+// ---------------------------------- Benchmark Int16 ----------------------------------
 
 func BenchmarkInt16(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -743,60 +1073,126 @@ func BenchmarkInt16(b *testing.B) {
 	}
 }
 
-func TestInt16_Sum(t *testing.T) {
-	input := makeVector[int16](70)
-	expect := sum(input)
-	result := SumInt16s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Int16 ----------------------------------
+
+func TestInt16_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[int16](70)
+		expect := sum(input)
+		result := SumInt16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int16](70)
+		expect := min(input)
+		result := MinInt16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int16](70)
+		expect := max(input)
+		result := MaxInt16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := add(make([]int16, 70), input1, input2)
+		result := AddInt16s(make([]int16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := sub(make([]int16, 70), input1, input2)
+		result := SubInt16s(make([]int16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := mul(make([]int16, 70), input1, input2)
+		result := MulInt16s(make([]int16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := div(make([]int16, 70), input1, input2)
+		result := DivInt16s(make([]int16, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt16_Min(t *testing.T) {
-	input := makeVector[int16](70)
-	expect := min(input)
-	result := MinInt16s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Int16 ----------------------------------
+
+func TestInt16_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[int16](70)
+		expect := sum(input)
+		result := SumInt16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int16](70)
+		expect := min(input)
+		result := MinInt16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int16](70)
+		expect := max(input)
+		result := MaxInt16s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := add(make([]int16, 70), input1, input2)
+		result := AddInt16s(make([]int16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := sub(make([]int16, 70), input1, input2)
+		result := SubInt16s(make([]int16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := mul(make([]int16, 70), input1, input2)
+		result := MulInt16s(make([]int16, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int16](70)
+		input2 := makeVector[int16](70)
+		expect := div(make([]int16, 70), input1, input2)
+		result := DivInt16s(make([]int16, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt16_Max(t *testing.T) {
-	input := makeVector[int16](70)
-	expect := max(input)
-	result := MaxInt16s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt16_Add(t *testing.T) {
-	input1 := makeVector[int16](70)
-	input2 := makeVector[int16](70)
-	expect := add(make([]int16, 70), input1, input2)
-	result := AddInt16s(make([]int16, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt16_Sub(t *testing.T) {
-	input1 := makeVector[int16](70)
-	input2 := makeVector[int16](70)
-	expect := sub(make([]int16, 70), input1, input2)
-	result := SubInt16s(make([]int16, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt16_Mul(t *testing.T) {
-	input1 := makeVector[int16](70)
-	input2 := makeVector[int16](70)
-	expect := mul(make([]int16, 70), input1, input2)
-	result := MulInt16s(make([]int16, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt16_Div(t *testing.T) {
-	input1 := makeVector[int16](70)
-	input2 := makeVector[int16](70)
-	expect := div(make([]int16, 70), input1, input2)
-	result := DivInt16s(make([]int16, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Int32 ----------------------------------
+// ---------------------------------- Benchmark Int32 ----------------------------------
 
 func BenchmarkInt32(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -874,60 +1270,126 @@ func BenchmarkInt32(b *testing.B) {
 	}
 }
 
-func TestInt32_Sum(t *testing.T) {
-	input := makeVector[int32](70)
-	expect := sum(input)
-	result := SumInt32s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Int32 ----------------------------------
+
+func TestInt32_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[int32](70)
+		expect := sum(input)
+		result := SumInt32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int32](70)
+		expect := min(input)
+		result := MinInt32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int32](70)
+		expect := max(input)
+		result := MaxInt32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := add(make([]int32, 70), input1, input2)
+		result := AddInt32s(make([]int32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := sub(make([]int32, 70), input1, input2)
+		result := SubInt32s(make([]int32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := mul(make([]int32, 70), input1, input2)
+		result := MulInt32s(make([]int32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := div(make([]int32, 70), input1, input2)
+		result := DivInt32s(make([]int32, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt32_Min(t *testing.T) {
-	input := makeVector[int32](70)
-	expect := min(input)
-	result := MinInt32s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Int32 ----------------------------------
+
+func TestInt32_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[int32](70)
+		expect := sum(input)
+		result := SumInt32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int32](70)
+		expect := min(input)
+		result := MinInt32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int32](70)
+		expect := max(input)
+		result := MaxInt32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := add(make([]int32, 70), input1, input2)
+		result := AddInt32s(make([]int32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := sub(make([]int32, 70), input1, input2)
+		result := SubInt32s(make([]int32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := mul(make([]int32, 70), input1, input2)
+		result := MulInt32s(make([]int32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int32](70)
+		input2 := makeVector[int32](70)
+		expect := div(make([]int32, 70), input1, input2)
+		result := DivInt32s(make([]int32, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt32_Max(t *testing.T) {
-	input := makeVector[int32](70)
-	expect := max(input)
-	result := MaxInt32s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt32_Add(t *testing.T) {
-	input1 := makeVector[int32](70)
-	input2 := makeVector[int32](70)
-	expect := add(make([]int32, 70), input1, input2)
-	result := AddInt32s(make([]int32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt32_Sub(t *testing.T) {
-	input1 := makeVector[int32](70)
-	input2 := makeVector[int32](70)
-	expect := sub(make([]int32, 70), input1, input2)
-	result := SubInt32s(make([]int32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt32_Mul(t *testing.T) {
-	input1 := makeVector[int32](70)
-	input2 := makeVector[int32](70)
-	expect := mul(make([]int32, 70), input1, input2)
-	result := MulInt32s(make([]int32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt32_Div(t *testing.T) {
-	input1 := makeVector[int32](70)
-	input2 := makeVector[int32](70)
-	expect := div(make([]int32, 70), input1, input2)
-	result := DivInt32s(make([]int32, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Int64 ----------------------------------
+// ---------------------------------- Benchmark Int64 ----------------------------------
 
 func BenchmarkInt64(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -1005,60 +1467,126 @@ func BenchmarkInt64(b *testing.B) {
 	}
 }
 
-func TestInt64_Sum(t *testing.T) {
-	input := makeVector[int64](70)
-	expect := sum(input)
-	result := SumInt64s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Int64 ----------------------------------
+
+func TestInt64_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[int64](70)
+		expect := sum(input)
+		result := SumInt64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int64](70)
+		expect := min(input)
+		result := MinInt64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int64](70)
+		expect := max(input)
+		result := MaxInt64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := add(make([]int64, 70), input1, input2)
+		result := AddInt64s(make([]int64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := sub(make([]int64, 70), input1, input2)
+		result := SubInt64s(make([]int64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := mul(make([]int64, 70), input1, input2)
+		result := MulInt64s(make([]int64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := div(make([]int64, 70), input1, input2)
+		result := DivInt64s(make([]int64, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt64_Min(t *testing.T) {
-	input := makeVector[int64](70)
-	expect := min(input)
-	result := MinInt64s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Int64 ----------------------------------
+
+func TestInt64_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[int64](70)
+		expect := sum(input)
+		result := SumInt64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[int64](70)
+		expect := min(input)
+		result := MinInt64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[int64](70)
+		expect := max(input)
+		result := MaxInt64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := add(make([]int64, 70), input1, input2)
+		result := AddInt64s(make([]int64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := sub(make([]int64, 70), input1, input2)
+		result := SubInt64s(make([]int64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := mul(make([]int64, 70), input1, input2)
+		result := MulInt64s(make([]int64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[int64](70)
+		input2 := makeVector[int64](70)
+		expect := div(make([]int64, 70), input1, input2)
+		result := DivInt64s(make([]int64, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestInt64_Max(t *testing.T) {
-	input := makeVector[int64](70)
-	expect := max(input)
-	result := MaxInt64s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt64_Add(t *testing.T) {
-	input1 := makeVector[int64](70)
-	input2 := makeVector[int64](70)
-	expect := add(make([]int64, 70), input1, input2)
-	result := AddInt64s(make([]int64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt64_Sub(t *testing.T) {
-	input1 := makeVector[int64](70)
-	input2 := makeVector[int64](70)
-	expect := sub(make([]int64, 70), input1, input2)
-	result := SubInt64s(make([]int64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt64_Mul(t *testing.T) {
-	input1 := makeVector[int64](70)
-	input2 := makeVector[int64](70)
-	expect := mul(make([]int64, 70), input1, input2)
-	result := MulInt64s(make([]int64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestInt64_Div(t *testing.T) {
-	input1 := makeVector[int64](70)
-	input2 := makeVector[int64](70)
-	expect := div(make([]int64, 70), input1, input2)
-	result := DivInt64s(make([]int64, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Float32 ----------------------------------
+// ---------------------------------- Benchmark Float32 ----------------------------------
 
 func BenchmarkFloat32(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -1136,60 +1664,126 @@ func BenchmarkFloat32(b *testing.B) {
 	}
 }
 
-func TestFloat32_Sum(t *testing.T) {
-	input := makeVector[float32](70)
-	expect := sum(input)
-	result := SumFloat32s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Float32 ----------------------------------
+
+func TestFloat32_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[float32](70)
+		expect := sum(input)
+		result := SumFloat32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[float32](70)
+		expect := min(input)
+		result := MinFloat32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[float32](70)
+		expect := max(input)
+		result := MaxFloat32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := add(make([]float32, 70), input1, input2)
+		result := AddFloat32s(make([]float32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := sub(make([]float32, 70), input1, input2)
+		result := SubFloat32s(make([]float32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := mul(make([]float32, 70), input1, input2)
+		result := MulFloat32s(make([]float32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := div(make([]float32, 70), input1, input2)
+		result := DivFloat32s(make([]float32, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestFloat32_Min(t *testing.T) {
-	input := makeVector[float32](70)
-	expect := min(input)
-	result := MinFloat32s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Fallback Float32 ----------------------------------
+
+func TestFloat32_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
+
+	{ // Sum
+		input := makeVector[float32](70)
+		expect := sum(input)
+		result := SumFloat32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[float32](70)
+		expect := min(input)
+		result := MinFloat32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[float32](70)
+		expect := max(input)
+		result := MaxFloat32s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := add(make([]float32, 70), input1, input2)
+		result := AddFloat32s(make([]float32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := sub(make([]float32, 70), input1, input2)
+		result := SubFloat32s(make([]float32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := mul(make([]float32, 70), input1, input2)
+		result := MulFloat32s(make([]float32, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[float32](70)
+		input2 := makeVector[float32](70)
+		expect := div(make([]float32, 70), input1, input2)
+		result := DivFloat32s(make([]float32, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestFloat32_Max(t *testing.T) {
-	input := makeVector[float32](70)
-	expect := max(input)
-	result := MaxFloat32s(input)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestFloat32_Add(t *testing.T) {
-	input1 := makeVector[float32](70)
-	input2 := makeVector[float32](70)
-	expect := add(make([]float32, 70), input1, input2)
-	result := AddFloat32s(make([]float32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestFloat32_Sub(t *testing.T) {
-	input1 := makeVector[float32](70)
-	input2 := makeVector[float32](70)
-	expect := sub(make([]float32, 70), input1, input2)
-	result := SubFloat32s(make([]float32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestFloat32_Mul(t *testing.T) {
-	input1 := makeVector[float32](70)
-	input2 := makeVector[float32](70)
-	expect := mul(make([]float32, 70), input1, input2)
-	result := MulFloat32s(make([]float32, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
-
-func TestFloat32_Div(t *testing.T) {
-	input1 := makeVector[float32](70)
-	input2 := makeVector[float32](70)
-	expect := div(make([]float32, 70), input1, input2)
-	result := DivFloat32s(make([]float32, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
-}
-
-// ---------------------------------- Float64 ----------------------------------
+// ---------------------------------- Benchmark Float64 ----------------------------------
 
 func BenchmarkFloat64(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -1267,55 +1861,121 @@ func BenchmarkFloat64(b *testing.B) {
 	}
 }
 
-func TestFloat64_Sum(t *testing.T) {
-	input := makeVector[float64](70)
-	expect := sum(input)
-	result := SumFloat64s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test Float64 ----------------------------------
+
+func TestFloat64_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[float64](70)
+		expect := sum(input)
+		result := SumFloat64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[float64](70)
+		expect := min(input)
+		result := MinFloat64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[float64](70)
+		expect := max(input)
+		result := MaxFloat64s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := add(make([]float64, 70), input1, input2)
+		result := AddFloat64s(make([]float64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := sub(make([]float64, 70), input1, input2)
+		result := SubFloat64s(make([]float64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := mul(make([]float64, 70), input1, input2)
+		result := MulFloat64s(make([]float64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := div(make([]float64, 70), input1, input2)
+		result := DivFloat64s(make([]float64, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func TestFloat64_Min(t *testing.T) {
-	input := makeVector[float64](70)
-	expect := min(input)
-	result := MinFloat64s(input)
-	assert.EqualValues(t, expect, result)
-}
+// ---------------------------------- Test Fallback Float64 ----------------------------------
 
-func TestFloat64_Max(t *testing.T) {
-	input := makeVector[float64](70)
-	expect := max(input)
-	result := MaxFloat64s(input)
-	assert.EqualValues(t, expect, result)
-}
+func TestFloat64_Fallback_Sum(t *testing.T) {
+	defer func(v bool) {
+		avx2 = v
+	}(avx2)
+	avx2 = false
 
-func TestFloat64_Add(t *testing.T) {
-	input1 := makeVector[float64](70)
-	input2 := makeVector[float64](70)
-	expect := add(make([]float64, 70), input1, input2)
-	result := AddFloat64s(make([]float64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
+	{ // Sum
+		input := makeVector[float64](70)
+		expect := sum(input)
+		result := SumFloat64s(input)
+		assert.EqualValues(t, expect, result)
+	}
 
-func TestFloat64_Sub(t *testing.T) {
-	input1 := makeVector[float64](70)
-	input2 := makeVector[float64](70)
-	expect := sub(make([]float64, 70), input1, input2)
-	result := SubFloat64s(make([]float64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
+	{ // Min
+		input := makeVector[float64](70)
+		expect := min(input)
+		result := MinFloat64s(input)
+		assert.EqualValues(t, expect, result)
+	}
 
-func TestFloat64_Mul(t *testing.T) {
-	input1 := makeVector[float64](70)
-	input2 := makeVector[float64](70)
-	expect := mul(make([]float64, 70), input1, input2)
-	result := MulFloat64s(make([]float64, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
+	{ // Max
+		input := makeVector[float64](70)
+		expect := max(input)
+		result := MaxFloat64s(input)
+		assert.EqualValues(t, expect, result)
+	}
 
-func TestFloat64_Div(t *testing.T) {
-	input1 := makeVector[float64](70)
-	input2 := makeVector[float64](70)
-	expect := div(make([]float64, 70), input1, input2)
-	result := DivFloat64s(make([]float64, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
+	{ // Add
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := add(make([]float64, 70), input1, input2)
+		result := AddFloat64s(make([]float64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := sub(make([]float64, 70), input1, input2)
+		result := SubFloat64s(make([]float64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := mul(make([]float64, 70), input1, input2)
+		result := MulFloat64s(make([]float64, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[float64](70)
+		input2 := makeVector[float64](70)
+		expect := div(make([]float64, 70), input1, input2)
+		result := DivFloat64s(make([]float64, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }

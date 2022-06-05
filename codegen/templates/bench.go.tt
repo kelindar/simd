@@ -11,7 +11,7 @@ import (
 )
 
 {{ range .Types }}
-// ---------------------------------- {{.Name}} ----------------------------------
+// ---------------------------------- Benchmark {{.Name}} ----------------------------------
 
 func Benchmark{{.Name}}(b *testing.B) {
 	result := make([]Result, 0, 64)
@@ -89,56 +89,122 @@ func Benchmark{{.Name}}(b *testing.B) {
 	}
 }
 
-func Test{{.Name}}_Sum(t *testing.T) {
-	input := makeVector[{{.Type}}](70)
-	expect := sum(input)
-	result := Sum{{.Name}}s(input)
-	assert.EqualValues(t, expect, result)
+// ---------------------------------- Test {{.Name}} ----------------------------------
+
+func Test{{.Name}}_Ops(t *testing.T) {
+	{ // Sum
+		input := makeVector[{{.Type}}](70)
+		expect := sum(input)
+		result := Sum{{.Name}}s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Min
+		input := makeVector[{{.Type}}](70)
+		expect := min(input)
+		result := Min{{.Name}}s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Max
+		input := makeVector[{{.Type}}](70)
+		expect := max(input)
+		result := Max{{.Name}}s(input)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Add
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := add(make([]{{.Type}}, 70), input1, input2)
+		result := Add{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := sub(make([]{{.Type}}, 70), input1, input2)
+		result := Sub{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := mul(make([]{{.Type}}, 70), input1, input2)
+		result := Mul{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := div(make([]{{.Type}}, 70), input1, input2)
+		result := Div{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 
-func Test{{.Name}}_Min(t *testing.T) {
-	input := makeVector[{{.Type}}](70)
-	expect := min(input)
-	result := Min{{.Name}}s(input)
-	assert.EqualValues(t, expect, result)
-}
+// ---------------------------------- Test Fallback {{.Name}} ----------------------------------
 
-func Test{{.Name}}_Max(t *testing.T) {
-	input := makeVector[{{.Type}}](70)
-	expect := max(input)
-	result := Max{{.Name}}s(input)
-	assert.EqualValues(t, expect, result)
-}
+func Test{{.Name}}_Fallback_Sum(t *testing.T) {
+	defer func(v bool){
+		avx2 = v
+	}(avx2)
+	avx2 = false
 
-func Test{{.Name}}_Add(t *testing.T) {
-	input1 := makeVector[{{.Type}}](70)
-	input2 := makeVector[{{.Type}}](70)
-	expect := add(make([]{{.Type}}, 70), input1, input2)
-	result := Add{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
+	{ // Sum
+		input := makeVector[{{.Type}}](70)
+		expect := sum(input)
+		result := Sum{{.Name}}s(input)
+		assert.EqualValues(t, expect, result)
+	}
 
-func Test{{.Name}}_Sub(t *testing.T) {
-	input1 := makeVector[{{.Type}}](70)
-	input2 := makeVector[{{.Type}}](70)
-	expect := sub(make([]{{.Type}}, 70), input1, input2)
-	result := Sub{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
+	{ // Min
+		input := makeVector[{{.Type}}](70)
+		expect := min(input)
+		result := Min{{.Name}}s(input)
+		assert.EqualValues(t, expect, result)
+	}
 
-func Test{{.Name}}_Mul(t *testing.T) {
-	input1 := makeVector[{{.Type}}](70)
-	input2 := makeVector[{{.Type}}](70)
-	expect := mul(make([]{{.Type}}, 70), input1, input2)
-	result := Mul{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
-	assert.EqualValues(t, expect, result)
-}
+	{ // Max
+		input := makeVector[{{.Type}}](70)
+		expect := max(input)
+		result := Max{{.Name}}s(input)
+		assert.EqualValues(t, expect, result)
+	}
 
-func Test{{.Name}}_Div(t *testing.T) {
-	input1 := makeVector[{{.Type}}](70)
-	input2 := makeVector[{{.Type}}](70)
-	expect := div(make([]{{.Type}}, 70), input1, input2)
-	result := Div{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
-	assert.InDeltaSlice(t, expect, result, 0.01)
+	{ // Add
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := add(make([]{{.Type}}, 70), input1, input2)
+		result := Add{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Sub
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := sub(make([]{{.Type}}, 70), input1, input2)
+		result := Sub{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Mul
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := mul(make([]{{.Type}}, 70), input1, input2)
+		result := Mul{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.EqualValues(t, expect, result)
+	}
+
+	{ // Div
+		input1 := makeVector[{{.Type}}](70)
+		input2 := makeVector[{{.Type}}](70)
+		expect := div(make([]{{.Type}}, 70), input1, input2)
+		result := Div{{.Name}}s(make([]{{.Type}}, 70), input1, input2)
+		assert.InDeltaSlice(t, expect, result, 0.01)
+	}
 }
 {{ end }}
