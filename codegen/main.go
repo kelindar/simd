@@ -69,7 +69,7 @@ func genCode(arch, mode string) {
 
 // Executes the template
 func execute(dst, src, arch, mode string) error {
-	body, err := templates.ReadFile("templates/" + src)
+	body, err := templates.ReadFile("templates/" + src + ".tt")
 	if err != nil {
 		return err
 	}
