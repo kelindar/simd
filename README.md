@@ -11,14 +11,43 @@
 
 This library contains a set of vectorized mathematical functions which were [auto-vectorized](https://llvm.org/docs/Vectorizers.html) using clang compiler and translated into PLAN9 assembly code for Go. Generic version is also provided for CPUs where vectorization is not available, or for which this library doesn't have a generated code.
 
-It currently supports only `AVX2`, but `AVX512` and `SVE` (for `ARM`) should be easy enough to generate. Most of the code in this library is auto-generated, which helps with maintenance.
+It currently supports `AVX2` on `amd64` and `NEON` (Advanced SIMD) on `arm64` (including Apple Silicon). Most of the code in this library is auto-generated, which helps with maintenance.
 
 ## Usage
 
-Usage of this library is very straightforward, it simply exposes a set of non-opinionated functions. For example, if you want to sum up a slice of floating point numbers, you can use `SumFloat32s([]float32) float32` function to do so.
+The API is intentionally simple and non-opinionated:
+
+- Reduction ops: `Sum*`, `Min*`, `Max*`
+- Element-wise ops: `Add*`, `Sub*`, `Mul*`, `Div*`
+- Typed fast paths for `int*`, `uint*`, `float*` slices
+- Generic fallback when SIMD is unavailable
+
+### Examples
+
+Compute a sum:
 
 ```go
 sum := simd.SumFloat32s([]float32{1, 2, 3, 4, 5})
+```
+
+Element-wise add into a destination buffer:
+
+```go
+a := []float32{1, 2, 3, 4}
+b := []float32{10, 20, 30, 40}
+dst := make([]float32, len(a))
+
+simd.AddFloat32s(dst, a, b)
+// dst => []float32{11, 22, 33, 44}
+```
+
+Generic API (works across numeric slice types):
+
+```go
+values := []int16{7, 2, 9, 4}
+min := simd.Min(values) // 2
+max := simd.Max(values) // 9
+sum := simd.Sum(values) // 22
 ```
 
 ## Benchmarks
