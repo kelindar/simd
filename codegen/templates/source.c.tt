@@ -1,0 +1,68 @@
+// Copyright (c) Roman Atachiants and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
+
+#include <stdint.h>
+
+{{ $Mode := .Mode }}
+{{ range .Types }}
+// ---------------------------------- {{.Name}} ----------------------------------
+
+void _{{.Type}}_sum({{.CType}} *input, {{.CType}} *result, uint64_t size) {
+    {{.CType}} sum = 0.0;
+    #pragma clang loop vectorize(enable) interleave(enable)
+    for (int i = 0; i < (int)size; ++i) {
+        sum += input[i];
+    }
+    *result = sum;
+}
+
+void _{{.Type}}_min({{.CType}} *input, {{.CType}} *result, uint64_t size) {
+    {{.CType}} min = input[0];
+    #pragma clang loop vectorize(enable) interleave(enable)
+    for (int i = 0; i < (int)size; i++) {
+        if (input[i] < min) {
+            min = input[i];
+        }
+    }
+    *result = min;
+}
+
+void _{{.Type}}_max({{.CType}} *input, {{.CType}} *result, uint64_t size) {
+    {{.CType}} max = input[0];
+    #pragma clang loop vectorize(enable) interleave(enable)
+    for (int i = 0; i < (int)size; i++) {
+        if (input[i] > max) {
+            max = input[i];
+        }
+    }
+    *result = max;
+}
+
+void _{{.Type}}_add({{.CType}} *input1, {{.CType}} *input2, {{.CType}} *output, uint64_t size) {
+    #pragma clang loop vectorize(enable) interleave(enable)
+    for (int i = 0; i < (int)size; i++) {
+        output[i] = input1[i] + input2[i];
+    }
+}
+
+void _{{.Type}}_sub({{.CType}} *input1, {{.CType}} *input2, {{.CType}} *output, uint64_t size) {
+    #pragma clang loop vectorize(enable) interleave(enable)
+    for (int i = 0; i < (int)size; i++) {
+        output[i] = input1[i] - input2[i];
+    }
+}
+
+void _{{.Type}}_mul({{.CType}} *input1, {{.CType}} *input2, {{.CType}} *output, uint64_t size) {
+    #pragma clang loop vectorize(enable) interleave(enable)
+    for (int i = 0; i < (int)size; i++) {
+        output[i] = input1[i] * input2[i];
+    }
+}
+
+void _{{.Type}}_div({{.CType}} *input1, {{.CType}} *input2, {{.CType}} *output, uint64_t size) {
+    #pragma clang loop vectorize(enable) interleave(enable)
+    for (int i = 0; i < (int)size; i++) {
+        output[i] = input1[i] / input2[i];
+    }
+}
+{{ end }}

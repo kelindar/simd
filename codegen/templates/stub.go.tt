@@ -1,0 +1,42 @@
+// Copyright (c) Roman Atachiants and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
+
+//go:build noasm || !(amd64 || arm64)
+// +build noasm !amd64,!arm64
+
+package simd
+
+import "unsafe"
+
+func init() {
+	hardware = false
+}
+{{ range .Types }}
+func _{{.Type}}_sum(input unsafe.Pointer, result unsafe.Pointer, size uint64) {
+	panic("simd: assembly not available")
+}
+
+func _{{.Type}}_min(input unsafe.Pointer, result unsafe.Pointer, size uint64) {
+	panic("simd: assembly not available")
+}
+
+func _{{.Type}}_max(input unsafe.Pointer, result unsafe.Pointer, size uint64) {
+	panic("simd: assembly not available")
+}
+
+func _{{.Type}}_add(input1 unsafe.Pointer, input2 unsafe.Pointer, output unsafe.Pointer, size uint64) {
+	panic("simd: assembly not available")
+}
+
+func _{{.Type}}_sub(input1 unsafe.Pointer, input2 unsafe.Pointer, output unsafe.Pointer, size uint64) {
+	panic("simd: assembly not available")
+}
+
+func _{{.Type}}_mul(input1 unsafe.Pointer, input2 unsafe.Pointer, output unsafe.Pointer, size uint64) {
+	panic("simd: assembly not available")
+}
+
+func _{{.Type}}_div(input1 unsafe.Pointer, input2 unsafe.Pointer, output unsafe.Pointer, size uint64) {
+	panic("simd: assembly not available")
+}
+{{ end }}

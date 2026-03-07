@@ -1,3 +1,3 @@
 ## Auto-Generate Vectorized Code
 
-This folder contains all of the tools that are used to generate [auto-vectorized](https://llvm.org/docs/Vectorizers.html) assembly and translates it to a PLAN9 assembly to be used by Go.
+This folder contains all of the tools that are used to generate [auto-vectorized](https://llvm.org/docs/Vectorizers.html) assembly and translate it to Go PLAN9 assembly using [gocc](https://github.com/kelindar/gocc).

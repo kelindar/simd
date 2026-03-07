@@ -1,23 +1,17 @@
 // Copyright (c) Roman Atachiants and contributors. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-//go:build amd64
-// +build amd64
-
 package simd
 
-import (
-	"unsafe"
-)
-
+import "unsafe"
 
 // ---------------------------------- Uint8 ----------------------------------
 
 // SumUint8s sums up all of the elements of the slice and returns the value
 func SumUint8s(input []uint8) (out uint8) {
 	switch {
-	case avx2:
-		_uint8_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint8_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -27,8 +21,8 @@ func SumUint8s(input []uint8) (out uint8) {
 // MinUint8s returns the smallest element value in the slice
 func MinUint8s(input []uint8) (out uint8) {
 	switch {
-	case avx2:
-		_uint8_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint8_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -38,8 +32,8 @@ func MinUint8s(input []uint8) (out uint8) {
 // MaxUint8s returns the largest element value in the slice
 func MaxUint8s(input []uint8) (out uint8) {
 	switch {
-	case avx2:
-		_uint8_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint8_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -48,8 +42,9 @@ func MaxUint8s(input []uint8) (out uint8) {
 
 // AddUint8s adds input1 to input2 and writes back the result into dst slice
 func AddUint8s(dst, input1, input2 []uint8) []uint8 {
-	if avx2 {
-		_uint8_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint8_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -57,8 +52,9 @@ func AddUint8s(dst, input1, input2 []uint8) []uint8 {
 
 // SubUint8s subtracts input2 from input1 and writes back the result into dst slice
 func SubUint8s(dst, input1, input2 []uint8) []uint8 {
-	if avx2 {
-		_uint8_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint8_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -66,8 +62,9 @@ func SubUint8s(dst, input1, input2 []uint8) []uint8 {
 
 // MulUint8s multiplies input1 by input2 and writes back the result into dst slice
 func MulUint8s(dst, input1, input2 []uint8) []uint8 {
-	if avx2 {
-		_uint8_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint8_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -75,8 +72,9 @@ func MulUint8s(dst, input1, input2 []uint8) []uint8 {
 
 // DivUint8s divides input1 by input2 and writes back the result into dst slice
 func DivUint8s(dst, input1, input2 []uint8) []uint8 {
-	if avx2 {
-		_uint8_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint8_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -87,8 +85,8 @@ func DivUint8s(dst, input1, input2 []uint8) []uint8 {
 // SumUint16s sums up all of the elements of the slice and returns the value
 func SumUint16s(input []uint16) (out uint16) {
 	switch {
-	case avx2:
-		_uint16_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint16_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -98,8 +96,8 @@ func SumUint16s(input []uint16) (out uint16) {
 // MinUint16s returns the smallest element value in the slice
 func MinUint16s(input []uint16) (out uint16) {
 	switch {
-	case avx2:
-		_uint16_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint16_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -109,8 +107,8 @@ func MinUint16s(input []uint16) (out uint16) {
 // MaxUint16s returns the largest element value in the slice
 func MaxUint16s(input []uint16) (out uint16) {
 	switch {
-	case avx2:
-		_uint16_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint16_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -119,8 +117,9 @@ func MaxUint16s(input []uint16) (out uint16) {
 
 // AddUint16s adds input1 to input2 and writes back the result into dst slice
 func AddUint16s(dst, input1, input2 []uint16) []uint16 {
-	if avx2 {
-		_uint16_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint16_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -128,8 +127,9 @@ func AddUint16s(dst, input1, input2 []uint16) []uint16 {
 
 // SubUint16s subtracts input2 from input1 and writes back the result into dst slice
 func SubUint16s(dst, input1, input2 []uint16) []uint16 {
-	if avx2 {
-		_uint16_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint16_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -137,8 +137,9 @@ func SubUint16s(dst, input1, input2 []uint16) []uint16 {
 
 // MulUint16s multiplies input1 by input2 and writes back the result into dst slice
 func MulUint16s(dst, input1, input2 []uint16) []uint16 {
-	if avx2 {
-		_uint16_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint16_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -146,8 +147,9 @@ func MulUint16s(dst, input1, input2 []uint16) []uint16 {
 
 // DivUint16s divides input1 by input2 and writes back the result into dst slice
 func DivUint16s(dst, input1, input2 []uint16) []uint16 {
-	if avx2 {
-		_uint16_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint16_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -158,8 +160,8 @@ func DivUint16s(dst, input1, input2 []uint16) []uint16 {
 // SumUint32s sums up all of the elements of the slice and returns the value
 func SumUint32s(input []uint32) (out uint32) {
 	switch {
-	case avx2:
-		_uint32_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint32_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -169,8 +171,8 @@ func SumUint32s(input []uint32) (out uint32) {
 // MinUint32s returns the smallest element value in the slice
 func MinUint32s(input []uint32) (out uint32) {
 	switch {
-	case avx2:
-		_uint32_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint32_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -180,8 +182,8 @@ func MinUint32s(input []uint32) (out uint32) {
 // MaxUint32s returns the largest element value in the slice
 func MaxUint32s(input []uint32) (out uint32) {
 	switch {
-	case avx2:
-		_uint32_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint32_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -190,8 +192,9 @@ func MaxUint32s(input []uint32) (out uint32) {
 
 // AddUint32s adds input1 to input2 and writes back the result into dst slice
 func AddUint32s(dst, input1, input2 []uint32) []uint32 {
-	if avx2 {
-		_uint32_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint32_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -199,8 +202,9 @@ func AddUint32s(dst, input1, input2 []uint32) []uint32 {
 
 // SubUint32s subtracts input2 from input1 and writes back the result into dst slice
 func SubUint32s(dst, input1, input2 []uint32) []uint32 {
-	if avx2 {
-		_uint32_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint32_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -208,8 +212,9 @@ func SubUint32s(dst, input1, input2 []uint32) []uint32 {
 
 // MulUint32s multiplies input1 by input2 and writes back the result into dst slice
 func MulUint32s(dst, input1, input2 []uint32) []uint32 {
-	if avx2 {
-		_uint32_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint32_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -217,8 +222,9 @@ func MulUint32s(dst, input1, input2 []uint32) []uint32 {
 
 // DivUint32s divides input1 by input2 and writes back the result into dst slice
 func DivUint32s(dst, input1, input2 []uint32) []uint32 {
-	if avx2 {
-		_uint32_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint32_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -229,8 +235,8 @@ func DivUint32s(dst, input1, input2 []uint32) []uint32 {
 // SumUint64s sums up all of the elements of the slice and returns the value
 func SumUint64s(input []uint64) (out uint64) {
 	switch {
-	case avx2:
-		_uint64_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint64_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -240,8 +246,8 @@ func SumUint64s(input []uint64) (out uint64) {
 // MinUint64s returns the smallest element value in the slice
 func MinUint64s(input []uint64) (out uint64) {
 	switch {
-	case avx2:
-		_uint64_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint64_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -251,8 +257,8 @@ func MinUint64s(input []uint64) (out uint64) {
 // MaxUint64s returns the largest element value in the slice
 func MaxUint64s(input []uint64) (out uint64) {
 	switch {
-	case avx2:
-		_uint64_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_uint64_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -261,8 +267,9 @@ func MaxUint64s(input []uint64) (out uint64) {
 
 // AddUint64s adds input1 to input2 and writes back the result into dst slice
 func AddUint64s(dst, input1, input2 []uint64) []uint64 {
-	if avx2 {
-		_uint64_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint64_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -270,8 +277,9 @@ func AddUint64s(dst, input1, input2 []uint64) []uint64 {
 
 // SubUint64s subtracts input2 from input1 and writes back the result into dst slice
 func SubUint64s(dst, input1, input2 []uint64) []uint64 {
-	if avx2 {
-		_uint64_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint64_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -279,8 +287,9 @@ func SubUint64s(dst, input1, input2 []uint64) []uint64 {
 
 // MulUint64s multiplies input1 by input2 and writes back the result into dst slice
 func MulUint64s(dst, input1, input2 []uint64) []uint64 {
-	if avx2 {
-		_uint64_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint64_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -288,8 +297,9 @@ func MulUint64s(dst, input1, input2 []uint64) []uint64 {
 
 // DivUint64s divides input1 by input2 and writes back the result into dst slice
 func DivUint64s(dst, input1, input2 []uint64) []uint64 {
-	if avx2 {
-		_uint64_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_uint64_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -300,8 +310,8 @@ func DivUint64s(dst, input1, input2 []uint64) []uint64 {
 // SumInt8s sums up all of the elements of the slice and returns the value
 func SumInt8s(input []int8) (out int8) {
 	switch {
-	case avx2:
-		_int8_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int8_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -311,8 +321,8 @@ func SumInt8s(input []int8) (out int8) {
 // MinInt8s returns the smallest element value in the slice
 func MinInt8s(input []int8) (out int8) {
 	switch {
-	case avx2:
-		_int8_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int8_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -322,8 +332,8 @@ func MinInt8s(input []int8) (out int8) {
 // MaxInt8s returns the largest element value in the slice
 func MaxInt8s(input []int8) (out int8) {
 	switch {
-	case avx2:
-		_int8_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int8_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -332,8 +342,9 @@ func MaxInt8s(input []int8) (out int8) {
 
 // AddInt8s adds input1 to input2 and writes back the result into dst slice
 func AddInt8s(dst, input1, input2 []int8) []int8 {
-	if avx2 {
-		_int8_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int8_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -341,8 +352,9 @@ func AddInt8s(dst, input1, input2 []int8) []int8 {
 
 // SubInt8s subtracts input2 from input1 and writes back the result into dst slice
 func SubInt8s(dst, input1, input2 []int8) []int8 {
-	if avx2 {
-		_int8_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int8_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -350,8 +362,9 @@ func SubInt8s(dst, input1, input2 []int8) []int8 {
 
 // MulInt8s multiplies input1 by input2 and writes back the result into dst slice
 func MulInt8s(dst, input1, input2 []int8) []int8 {
-	if avx2 {
-		_int8_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int8_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -359,8 +372,9 @@ func MulInt8s(dst, input1, input2 []int8) []int8 {
 
 // DivInt8s divides input1 by input2 and writes back the result into dst slice
 func DivInt8s(dst, input1, input2 []int8) []int8 {
-	if avx2 {
-		_int8_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int8_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -371,8 +385,8 @@ func DivInt8s(dst, input1, input2 []int8) []int8 {
 // SumInt16s sums up all of the elements of the slice and returns the value
 func SumInt16s(input []int16) (out int16) {
 	switch {
-	case avx2:
-		_int16_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int16_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -382,8 +396,8 @@ func SumInt16s(input []int16) (out int16) {
 // MinInt16s returns the smallest element value in the slice
 func MinInt16s(input []int16) (out int16) {
 	switch {
-	case avx2:
-		_int16_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int16_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -393,8 +407,8 @@ func MinInt16s(input []int16) (out int16) {
 // MaxInt16s returns the largest element value in the slice
 func MaxInt16s(input []int16) (out int16) {
 	switch {
-	case avx2:
-		_int16_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int16_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -403,8 +417,9 @@ func MaxInt16s(input []int16) (out int16) {
 
 // AddInt16s adds input1 to input2 and writes back the result into dst slice
 func AddInt16s(dst, input1, input2 []int16) []int16 {
-	if avx2 {
-		_int16_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int16_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -412,8 +427,9 @@ func AddInt16s(dst, input1, input2 []int16) []int16 {
 
 // SubInt16s subtracts input2 from input1 and writes back the result into dst slice
 func SubInt16s(dst, input1, input2 []int16) []int16 {
-	if avx2 {
-		_int16_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int16_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -421,8 +437,9 @@ func SubInt16s(dst, input1, input2 []int16) []int16 {
 
 // MulInt16s multiplies input1 by input2 and writes back the result into dst slice
 func MulInt16s(dst, input1, input2 []int16) []int16 {
-	if avx2 {
-		_int16_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int16_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -430,8 +447,9 @@ func MulInt16s(dst, input1, input2 []int16) []int16 {
 
 // DivInt16s divides input1 by input2 and writes back the result into dst slice
 func DivInt16s(dst, input1, input2 []int16) []int16 {
-	if avx2 {
-		_int16_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int16_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -442,8 +460,8 @@ func DivInt16s(dst, input1, input2 []int16) []int16 {
 // SumInt32s sums up all of the elements of the slice and returns the value
 func SumInt32s(input []int32) (out int32) {
 	switch {
-	case avx2:
-		_int32_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int32_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -453,8 +471,8 @@ func SumInt32s(input []int32) (out int32) {
 // MinInt32s returns the smallest element value in the slice
 func MinInt32s(input []int32) (out int32) {
 	switch {
-	case avx2:
-		_int32_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int32_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -464,8 +482,8 @@ func MinInt32s(input []int32) (out int32) {
 // MaxInt32s returns the largest element value in the slice
 func MaxInt32s(input []int32) (out int32) {
 	switch {
-	case avx2:
-		_int32_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int32_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -474,8 +492,9 @@ func MaxInt32s(input []int32) (out int32) {
 
 // AddInt32s adds input1 to input2 and writes back the result into dst slice
 func AddInt32s(dst, input1, input2 []int32) []int32 {
-	if avx2 {
-		_int32_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int32_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -483,8 +502,9 @@ func AddInt32s(dst, input1, input2 []int32) []int32 {
 
 // SubInt32s subtracts input2 from input1 and writes back the result into dst slice
 func SubInt32s(dst, input1, input2 []int32) []int32 {
-	if avx2 {
-		_int32_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int32_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -492,8 +512,9 @@ func SubInt32s(dst, input1, input2 []int32) []int32 {
 
 // MulInt32s multiplies input1 by input2 and writes back the result into dst slice
 func MulInt32s(dst, input1, input2 []int32) []int32 {
-	if avx2 {
-		_int32_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int32_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -501,8 +522,9 @@ func MulInt32s(dst, input1, input2 []int32) []int32 {
 
 // DivInt32s divides input1 by input2 and writes back the result into dst slice
 func DivInt32s(dst, input1, input2 []int32) []int32 {
-	if avx2 {
-		_int32_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int32_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -513,8 +535,8 @@ func DivInt32s(dst, input1, input2 []int32) []int32 {
 // SumInt64s sums up all of the elements of the slice and returns the value
 func SumInt64s(input []int64) (out int64) {
 	switch {
-	case avx2:
-		_int64_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int64_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -524,8 +546,8 @@ func SumInt64s(input []int64) (out int64) {
 // MinInt64s returns the smallest element value in the slice
 func MinInt64s(input []int64) (out int64) {
 	switch {
-	case avx2:
-		_int64_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int64_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -535,8 +557,8 @@ func MinInt64s(input []int64) (out int64) {
 // MaxInt64s returns the largest element value in the slice
 func MaxInt64s(input []int64) (out int64) {
 	switch {
-	case avx2:
-		_int64_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_int64_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -545,8 +567,9 @@ func MaxInt64s(input []int64) (out int64) {
 
 // AddInt64s adds input1 to input2 and writes back the result into dst slice
 func AddInt64s(dst, input1, input2 []int64) []int64 {
-	if avx2 {
-		_int64_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int64_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -554,8 +577,9 @@ func AddInt64s(dst, input1, input2 []int64) []int64 {
 
 // SubInt64s subtracts input2 from input1 and writes back the result into dst slice
 func SubInt64s(dst, input1, input2 []int64) []int64 {
-	if avx2 {
-		_int64_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int64_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -563,8 +587,9 @@ func SubInt64s(dst, input1, input2 []int64) []int64 {
 
 // MulInt64s multiplies input1 by input2 and writes back the result into dst slice
 func MulInt64s(dst, input1, input2 []int64) []int64 {
-	if avx2 {
-		_int64_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int64_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -572,8 +597,9 @@ func MulInt64s(dst, input1, input2 []int64) []int64 {
 
 // DivInt64s divides input1 by input2 and writes back the result into dst slice
 func DivInt64s(dst, input1, input2 []int64) []int64 {
-	if avx2 {
-		_int64_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_int64_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -584,8 +610,8 @@ func DivInt64s(dst, input1, input2 []int64) []int64 {
 // SumFloat32s sums up all of the elements of the slice and returns the value
 func SumFloat32s(input []float32) (out float32) {
 	switch {
-	case avx2:
-		_float32_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_float32_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -595,8 +621,8 @@ func SumFloat32s(input []float32) (out float32) {
 // MinFloat32s returns the smallest element value in the slice
 func MinFloat32s(input []float32) (out float32) {
 	switch {
-	case avx2:
-		_float32_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_float32_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -606,8 +632,8 @@ func MinFloat32s(input []float32) (out float32) {
 // MaxFloat32s returns the largest element value in the slice
 func MaxFloat32s(input []float32) (out float32) {
 	switch {
-	case avx2:
-		_float32_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_float32_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -616,8 +642,9 @@ func MaxFloat32s(input []float32) (out float32) {
 
 // AddFloat32s adds input1 to input2 and writes back the result into dst slice
 func AddFloat32s(dst, input1, input2 []float32) []float32 {
-	if avx2 {
-		_float32_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float32_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -625,8 +652,9 @@ func AddFloat32s(dst, input1, input2 []float32) []float32 {
 
 // SubFloat32s subtracts input2 from input1 and writes back the result into dst slice
 func SubFloat32s(dst, input1, input2 []float32) []float32 {
-	if avx2 {
-		_float32_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float32_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -634,8 +662,9 @@ func SubFloat32s(dst, input1, input2 []float32) []float32 {
 
 // MulFloat32s multiplies input1 by input2 and writes back the result into dst slice
 func MulFloat32s(dst, input1, input2 []float32) []float32 {
-	if avx2 {
-		_float32_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float32_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -643,8 +672,9 @@ func MulFloat32s(dst, input1, input2 []float32) []float32 {
 
 // DivFloat32s divides input1 by input2 and writes back the result into dst slice
 func DivFloat32s(dst, input1, input2 []float32) []float32 {
-	if avx2 {
-		_float32_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float32_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
@@ -655,8 +685,8 @@ func DivFloat32s(dst, input1, input2 []float32) []float32 {
 // SumFloat64s sums up all of the elements of the slice and returns the value
 func SumFloat64s(input []float64) (out float64) {
 	switch {
-	case avx2:
-		_float64_avx2_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_float64_sum(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return sum(input)
@@ -666,8 +696,8 @@ func SumFloat64s(input []float64) (out float64) {
 // MinFloat64s returns the smallest element value in the slice
 func MinFloat64s(input []float64) (out float64) {
 	switch {
-	case avx2:
-		_float64_avx2_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_float64_min(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return min(input)
@@ -677,8 +707,8 @@ func MinFloat64s(input []float64) (out float64) {
 // MaxFloat64s returns the largest element value in the slice
 func MaxFloat64s(input []float64) (out float64) {
 	switch {
-	case avx2:
-		_float64_avx2_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
+	case hardware:
+		_float64_max(unsafe.Pointer(&input[0]), unsafe.Pointer(&out), uint64(len(input)))
 		return
 	default:
 		return max(input)
@@ -687,8 +717,9 @@ func MaxFloat64s(input []float64) (out float64) {
 
 // AddFloat64s adds input1 to input2 and writes back the result into dst slice
 func AddFloat64s(dst, input1, input2 []float64) []float64 {
-	if avx2 {
-		_float64_avx2_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float64_add(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return add(dst, input1, input2)
@@ -696,8 +727,9 @@ func AddFloat64s(dst, input1, input2 []float64) []float64 {
 
 // SubFloat64s subtracts input2 from input1 and writes back the result into dst slice
 func SubFloat64s(dst, input1, input2 []float64) []float64 {
-	if avx2 {
-		_float64_avx2_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float64_sub(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return sub(dst, input1, input2)
@@ -705,8 +737,9 @@ func SubFloat64s(dst, input1, input2 []float64) []float64 {
 
 // MulFloat64s multiplies input1 by input2 and writes back the result into dst slice
 func MulFloat64s(dst, input1, input2 []float64) []float64 {
-	if avx2 {
-		_float64_avx2_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float64_mul(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return mul(dst, input1, input2)
@@ -714,8 +747,9 @@ func MulFloat64s(dst, input1, input2 []float64) []float64 {
 
 // DivFloat64s divides input1 by input2 and writes back the result into dst slice
 func DivFloat64s(dst, input1, input2 []float64) []float64 {
-	if avx2 {
-		_float64_avx2_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
+	switch {
+	case hardware:
+		_float64_div(unsafe.Pointer(&input1[0]), unsafe.Pointer(&input2[0]), unsafe.Pointer(&(dst)[0]), uint64(len(dst)))
 		return dst
 	}
 	return div(dst, input1, input2)
