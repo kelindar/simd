@@ -525,24 +525,7 @@ LBB4_12:
 	JMP  LBB4_18
 
 LCPI5_0:
-//
-DATA LCPI5_0<>+0x0000(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0002(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0004(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0006(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0008(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x000a(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x000c(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x000e(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0010(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0012(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0014(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0016(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x0018(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x001a(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x001c(SB)/2, $0x00ff
-DATA LCPI5_0<>+0x001e(SB)/2, $0x00ff
-GLOBL LCPI5_0<>(SB), (8+16), $32
+	//
 
 TEXT ·_uint8_mul(SB), $0-32
 	MOVQ input1+0(FP), DI
@@ -623,7 +606,7 @@ LBB5_7:
 	WORD $0x894d; BYTE $0xc1 // mov	r9, r8
 	WORD $0x294d; BYTE $0xd1 // sub	r9, r10
 	WORD $0xc031             // xor	eax, eax
-	QUAD $0x00000000056ffdc5 // vmovdqa	ymm0, ymmword ptr [rip + .LCPI5_0]
+	QUAD $0x0000014b056ffec5 // vmovdqu	ymm0, ymmword ptr [rip + .LCPI5_0]
 
 LBB5_8:
 	LONG $0x1c6ffec5; BYTE $0x07   // vmovdqu	ymm3, ymmword ptr [rdi + rax]
@@ -688,7 +671,7 @@ LBB5_11:
 	LONG $0x0fe28341         // and	r10d, 15
 	WORD $0x894d; BYTE $0xc1 // mov	r9, r8
 	WORD $0x294d; BYTE $0xd1 // sub	r9, r10
-	QUAD $0x00000000056ffdc5 // vmovdqa	ymm0, ymmword ptr [rip + .LCPI5_0]
+	QUAD $0x0000003a056ffec5 // vmovdqu	ymm0, ymmword ptr [rip + .LCPI5_0]
 
 LBB5_12:
 	LONG $0x307de2c4; WORD $0x070c // vpmovzxbw	ymm1, xmmword ptr [rdi + rax]
@@ -704,6 +687,22 @@ LBB5_12:
 	WORD $0x854d; BYTE $0xd2       // test	r10, r10
 	JNE  LBB5_14
 	JMP  LBB5_18
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
 
 TEXT ·_uint8_div(SB), $0-32
 	MOVQ input1+0(FP), DI
@@ -2461,9 +2460,7 @@ LBB21_8:
 	BYTE $0xc3               // ret
 
 LCPI22_0:
-//
-DATA LCPI22_0<>+0x0000(SB)/8, $-0x8000000000000000
-GLOBL LCPI22_0<>(SB), (8+16), $8
+	//
 
 TEXT ·_uint64_min(SB), $0-32
 	MOVQ input+0(FP), DI
@@ -2487,7 +2484,7 @@ LBB22_3:
 	WORD $0x2948; BYTE $0xd1             // sub	rcx, rdx
 	LONG $0x6ef9e1c4; BYTE $0xc0         // vmovq	xmm0, rax
 	LONG $0x597de2c4; BYTE $0xc8         // vpbroadcastq	ymm1, xmm0
-	QUAD $0x00000005597de2c4; BYTE $0x00 // vpbroadcastq	ymm0, qword ptr [rip + .LCPI22_0]
+	QUAD $0x00010d05597de2c4; BYTE $0x00 // vpbroadcastq	ymm0, qword ptr [rip + .LCPI22_0]
 	WORD $0xc031                         // xor	eax, eax
 	LONG $0xe16ffdc5                     // vmovdqa	ymm4, ymm1
 	LONG $0xd96ffdc5                     // vmovdqa	ymm3, ymm1
@@ -2559,9 +2556,8 @@ LBB22_7:
 	BYTE $0xc3               // ret
 
 LCPI23_0:
-//
-DATA LCPI23_0<>+0x0000(SB)/8, $-0x8000000000000000
-GLOBL LCPI23_0<>(SB), (8+16), $8
+	//
+	QUAD $0x8000000000000000
 
 TEXT ·_uint64_max(SB), $0-32
 	MOVQ input+0(FP), DI
@@ -2585,7 +2581,7 @@ LBB23_3:
 	WORD $0x2948; BYTE $0xd1             // sub	rcx, rdx
 	LONG $0x6ef9e1c4; BYTE $0xc0         // vmovq	xmm0, rax
 	LONG $0x597de2c4; BYTE $0xc8         // vpbroadcastq	ymm1, xmm0
-	QUAD $0x00000005597de2c4; BYTE $0x00 // vpbroadcastq	ymm0, qword ptr [rip + .LCPI23_0]
+	QUAD $0x00010d05597de2c4; BYTE $0x00 // vpbroadcastq	ymm0, qword ptr [rip + .LCPI23_0]
 	WORD $0xc031                         // xor	eax, eax
 	LONG $0xe16ffdc5                     // vmovdqa	ymm4, ymm1
 	LONG $0xd96ffdc5                     // vmovdqa	ymm3, ymm1
@@ -2655,6 +2651,7 @@ LBB23_7:
 	BYTE $0x5d               // pop	rbp
 	WORD $0xf8c5; BYTE $0x77 // vzeroupper
 	BYTE $0xc3               // ret
+	QUAD $0x8000000000000000
 
 TEXT ·_uint64_add(SB), $0-32
 	MOVQ input1+0(FP), DI
@@ -3252,7 +3249,7 @@ LBB29_6:
 	LONG $0x387de2c4; BYTE $0xc3               // vpminsb	ymm0, ymm0, ymm3
 	LONG $0x397de3c4; WORD $0x01c1             // vextracti128	xmm1, ymm0, 1
 	LONG $0x3879e2c4; BYTE $0xc1               // vpminsb	xmm0, xmm0, xmm1
-	QUAD $0x0000000005eff9c5                   // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI29_0]
+	QUAD $0x0000008305eff9c5                   // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI29_0]
 	LONG $0xd071f1c5; BYTE $0x08               // vpsrlw	xmm1, xmm0, 8
 	LONG $0xc1daf9c5                           // vpminub	xmm0, xmm0, xmm1
 	LONG $0x4179e2c4; BYTE $0xc0               // vphminposuw	xmm0, xmm0
@@ -3276,7 +3273,7 @@ LBB29_10:
 	LONG $0x10c18348               // add	rcx, 16
 	WORD $0x3949; BYTE $0xca       // cmp	r10, rcx
 	JNE  LBB29_10
-	QUAD $0x0000000005eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI29_0]
+	QUAD $0x0000003805eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI29_0]
 	LONG $0xd071f1c5; BYTE $0x08   // vpsrlw	xmm1, xmm0, 8
 	LONG $0xc1daf9c5               // vpminub	xmm0, xmm0, xmm1
 	LONG $0x4179e2c4; BYTE $0xc0   // vphminposuw	xmm0, xmm0
@@ -3303,6 +3300,22 @@ LBB29_13:
 
 LCPI30_0:
 	//
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
+	BYTE $0x80
 
 TEXT ·_int8_max(SB), $0-32
 	MOVQ input+0(FP), DI
@@ -3351,7 +3364,7 @@ LBB30_6:
 	LONG $0x3c7de2c4; BYTE $0xc3               // vpmaxsb	ymm0, ymm0, ymm3
 	LONG $0x397de3c4; WORD $0x01c1             // vextracti128	xmm1, ymm0, 1
 	LONG $0x3c79e2c4; BYTE $0xc1               // vpmaxsb	xmm0, xmm0, xmm1
-	QUAD $0x0000000005eff9c5                   // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI30_0]
+	QUAD $0x0000008305eff9c5                   // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI30_0]
 	LONG $0xd071f1c5; BYTE $0x08               // vpsrlw	xmm1, xmm0, 8
 	LONG $0xc1daf9c5                           // vpminub	xmm0, xmm0, xmm1
 	LONG $0x4179e2c4; BYTE $0xc0               // vphminposuw	xmm0, xmm0
@@ -3375,7 +3388,7 @@ LBB30_10:
 	LONG $0x10c18348               // add	rcx, 16
 	WORD $0x3949; BYTE $0xca       // cmp	r10, rcx
 	JNE  LBB30_10
-	QUAD $0x0000000005eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI30_0]
+	QUAD $0x0000003805eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI30_0]
 	LONG $0xd071f1c5; BYTE $0x08   // vpsrlw	xmm1, xmm0, 8
 	LONG $0xc1daf9c5               // vpminub	xmm0, xmm0, xmm1
 	LONG $0x4179e2c4; BYTE $0xc0   // vphminposuw	xmm0, xmm0
@@ -3399,6 +3412,22 @@ LBB30_13:
 	BYTE $0x5d               // pop	rbp
 	WORD $0xf8c5; BYTE $0x77 // vzeroupper
 	BYTE $0xc3               // ret
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
+	BYTE $0x7f
 
 TEXT ·_int8_add(SB), $0-32
 	MOVQ input1+0(FP), DI
@@ -3639,24 +3668,7 @@ LBB32_12:
 	JMP  LBB32_18
 
 LCPI33_0:
-//
-DATA LCPI33_0<>+0x0000(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0002(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0004(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0006(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0008(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x000a(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x000c(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x000e(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0010(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0012(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0014(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0016(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x0018(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x001a(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x001c(SB)/2, $0x00ff
-DATA LCPI33_0<>+0x001e(SB)/2, $0x00ff
-GLOBL LCPI33_0<>(SB), (8+16), $32
+	//
 
 TEXT ·_int8_mul(SB), $0-32
 	MOVQ input1+0(FP), DI
@@ -3737,7 +3749,7 @@ LBB33_7:
 	WORD $0x894d; BYTE $0xc1 // mov	r9, r8
 	WORD $0x294d; BYTE $0xd1 // sub	r9, r10
 	WORD $0xc031             // xor	eax, eax
-	QUAD $0x00000000056ffdc5 // vmovdqa	ymm0, ymmword ptr [rip + .LCPI33_0]
+	QUAD $0x0000014b056ffec5 // vmovdqu	ymm0, ymmword ptr [rip + .LCPI33_0]
 
 LBB33_8:
 	LONG $0x1c6ffec5; BYTE $0x07   // vmovdqu	ymm3, ymmword ptr [rdi + rax]
@@ -3802,7 +3814,7 @@ LBB33_11:
 	LONG $0x0fe28341         // and	r10d, 15
 	WORD $0x894d; BYTE $0xc1 // mov	r9, r8
 	WORD $0x294d; BYTE $0xd1 // sub	r9, r10
-	QUAD $0x00000000056ffdc5 // vmovdqa	ymm0, ymmword ptr [rip + .LCPI33_0]
+	QUAD $0x0000003a056ffec5 // vmovdqu	ymm0, ymmword ptr [rip + .LCPI33_0]
 
 LBB33_12:
 	LONG $0x307de2c4; WORD $0x070c // vpmovzxbw	ymm1, xmmword ptr [rdi + rax]
@@ -3820,9 +3832,23 @@ LBB33_12:
 	JMP  LBB33_18
 
 LCPI34_0:
-//
-DATA LCPI34_0<>+0x0000(SB)/2, $0x00ff
-GLOBL LCPI34_0<>(SB), (8+16), $2
+	//
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
+	WORD $0x00ff
 
 TEXT ·_int8_div(SB), $0-32
 	MOVQ input1+0(FP), DI
@@ -3859,7 +3885,7 @@ LBB34_3:
 	WORD $0x894d; BYTE $0xd3             // mov	r11, r10
 	WORD $0x294d; BYTE $0xf3             // sub	r11, r14
 	WORD $0x3145; BYTE $0xff             // xor	r15d, r15d
-	QUAD $0x00000005797de2c4; BYTE $0x00 // vpbroadcastw	ymm0, word ptr [rip + .LCPI34_0]
+	QUAD $0x00035305797de2c4; BYTE $0x00 // vpbroadcastw	ymm0, word ptr [rip + .LCPI34_0]
 
 LBB34_6:
 	LONG $0x207da2c4; WORD $0x3f4c; BYTE $0x10 // vpmovsxbw	ymm1, xmmword ptr [rdi + r15 + 16]
@@ -4086,6 +4112,7 @@ LBB34_12:
 	BYTE $0x5d               // pop	rbp
 	WORD $0xf8c5; BYTE $0x77 // vzeroupper
 	BYTE $0xc3               // ret
+	WORD $0x00ff
 
 TEXT ·_int16_sum(SB), $0-32
 	MOVQ input+0(FP), DI
@@ -4187,16 +4214,7 @@ LBB35_14:
 	BYTE $0xc3               // ret
 
 LCPI36_0:
-//
-DATA LCPI36_0<>+0x0000(SB)/2, $0x8000
-DATA LCPI36_0<>+0x0002(SB)/2, $0x8000
-DATA LCPI36_0<>+0x0004(SB)/2, $0x8000
-DATA LCPI36_0<>+0x0006(SB)/2, $0x8000
-DATA LCPI36_0<>+0x0008(SB)/2, $0x8000
-DATA LCPI36_0<>+0x000a(SB)/2, $0x8000
-DATA LCPI36_0<>+0x000c(SB)/2, $0x8000
-DATA LCPI36_0<>+0x000e(SB)/2, $0x8000
-GLOBL LCPI36_0<>(SB), (8+16), $16
+	//
 
 TEXT ·_int16_min(SB), $0-32
 	MOVQ input+0(FP), DI
@@ -4255,7 +4273,7 @@ LBB36_7:
 	LONG $0xc3eafdc5               // vpminsw	ymm0, ymm0, ymm3
 	LONG $0x397de3c4; WORD $0x01c1 // vextracti128	xmm1, ymm0, 1
 	LONG $0xc1eaf9c5               // vpminsw	xmm0, xmm0, xmm1
-	QUAD $0x0000000005eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI36_0]
+	QUAD $0x0000008405eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI36_0]
 	LONG $0x4179e2c4; BYTE $0xc0   // vphminposuw	xmm0, xmm0
 	LONG $0xc07ef9c5               // vmovd	eax, xmm0
 	LONG $0x00800035; BYTE $0x00   // xor	eax, 32768
@@ -4277,7 +4295,7 @@ LBB36_12:
 	LONG $0x08c18348             // add	rcx, 8
 	WORD $0x3949; BYTE $0xca     // cmp	r10, rcx
 	JNE  LBB36_12
-	QUAD $0x0000000005eff9c5     // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI36_0]
+	QUAD $0x0000004005eff9c5     // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI36_0]
 	LONG $0x4179e2c4; BYTE $0xc0 // vphminposuw	xmm0, xmm0
 	LONG $0xc07ef9c5             // vmovd	eax, xmm0
 	LONG $0x00800035; BYTE $0x00 // xor	eax, 32768
@@ -4304,16 +4322,15 @@ LBB36_9:
 	BYTE $0xc3               // ret
 
 LCPI37_0:
-//
-DATA LCPI37_0<>+0x0000(SB)/2, $0x7fff
-DATA LCPI37_0<>+0x0002(SB)/2, $0x7fff
-DATA LCPI37_0<>+0x0004(SB)/2, $0x7fff
-DATA LCPI37_0<>+0x0006(SB)/2, $0x7fff
-DATA LCPI37_0<>+0x0008(SB)/2, $0x7fff
-DATA LCPI37_0<>+0x000a(SB)/2, $0x7fff
-DATA LCPI37_0<>+0x000c(SB)/2, $0x7fff
-DATA LCPI37_0<>+0x000e(SB)/2, $0x7fff
-GLOBL LCPI37_0<>(SB), (8+16), $16
+	//
+	WORD $0x8000
+	WORD $0x8000
+	WORD $0x8000
+	WORD $0x8000
+	WORD $0x8000
+	WORD $0x8000
+	WORD $0x8000
+	WORD $0x8000
 
 TEXT ·_int16_max(SB), $0-32
 	MOVQ input+0(FP), DI
@@ -4372,7 +4389,7 @@ LBB37_7:
 	LONG $0xc3eefdc5               // vpmaxsw	ymm0, ymm0, ymm3
 	LONG $0x397de3c4; WORD $0x01c1 // vextracti128	xmm1, ymm0, 1
 	LONG $0xc1eef9c5               // vpmaxsw	xmm0, xmm0, xmm1
-	QUAD $0x0000000005eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI37_0]
+	QUAD $0x0000008405eff9c5       // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI37_0]
 	LONG $0x4179e2c4; BYTE $0xc0   // vphminposuw	xmm0, xmm0
 	LONG $0xc07ef9c5               // vmovd	eax, xmm0
 	LONG $0x007fff35; BYTE $0x00   // xor	eax, 32767
@@ -4394,7 +4411,7 @@ LBB37_12:
 	LONG $0x08c18348             // add	rcx, 8
 	WORD $0x3949; BYTE $0xca     // cmp	r10, rcx
 	JNE  LBB37_12
-	QUAD $0x0000000005eff9c5     // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI37_0]
+	QUAD $0x0000004005eff9c5     // vpxor	xmm0, xmm0, xmmword ptr [rip + .LCPI37_0]
 	LONG $0x4179e2c4; BYTE $0xc0 // vphminposuw	xmm0, xmm0
 	LONG $0xc07ef9c5             // vmovd	eax, xmm0
 	LONG $0x007fff35; BYTE $0x00 // xor	eax, 32767
@@ -4419,6 +4436,14 @@ LBB37_9:
 	BYTE $0x5d               // pop	rbp
 	WORD $0xf8c5; BYTE $0x77 // vzeroupper
 	BYTE $0xc3               // ret
+	WORD $0x7fff
+	WORD $0x7fff
+	WORD $0x7fff
+	WORD $0x7fff
+	WORD $0x7fff
+	WORD $0x7fff
+	WORD $0x7fff
+	WORD $0x7fff
 
 TEXT ·_int16_add(SB), $0-32
 	MOVQ input1+0(FP), DI
