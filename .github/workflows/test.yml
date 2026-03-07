@@ -1,5 +1,5 @@
 name: Test
-on: [push, pull_request]
+on: [push]
 env:
   GITHUB_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
   GO111MODULE: "on"
@@ -7,16 +7,12 @@ jobs:
   test:
     name: Test with Coverage
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go: ["1.18"]
     steps:
-      - name: Set up Go ${{ matrix.go }}
-        uses: actions/setup-go@v3
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
         with:
-          go-version: ${{ matrix.go }}
-      - name: Check out code
-        uses: actions/checkout@v3
+          go-version: "1.25"
+
       - name: Install dependencies
         run: |
           go mod download
