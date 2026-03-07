@@ -3,14 +3,18 @@
 
 package simd
 
-//go:generate go run ./codegen/main.go
+//go:generate sh -c "cd ./codegen && ./generate.sh"
 import (
+	"runtime"
+
 	"github.com/klauspost/cpuid/v2"
 )
 
 var (
-	avx2 = cpuid.CPU.Supports(cpuid.AVX2)
-	sve  = cpuid.CPU.Supports(cpuid.SVE)
+	avx2  = cpuid.CPU.Supports(cpuid.AVX2) && cpuid.CPU.Supports(cpuid.FMA3)
+	apple = runtime.GOARCH == "arm64" && runtime.GOOS == "darwin"
+	neon  = runtime.GOARCH == "arm64" && cpuid.CPU.Supports(cpuid.SVE)
+	hardware = avx2 || apple || neon
 )
 
 // Number represents a number constraint for SIMD operations

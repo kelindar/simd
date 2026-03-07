@@ -1,32 +1,12 @@
 #!/bin/bash
+set -euo pipefail
 
-PATH="$PATH:./bin"
-CLANG_OPTS="-mno-red-zone -mstackrealign -mllvm -inline-threshold=1000 -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -ffast-math -O3"
+cd "$(dirname "$0")"
+go run ./templates/main.go
 
-function build_avx2_amd64 {
-    SRC="simd_avx2_amd64.cpp"
-    ASM="simd_avx2_amd64.s"
-    clang-14 -S -mavx2 -masm=intel $CLANG_OPTS -o $ASM $SRC
-    c2goasm -a -f $ASM ../$ASM
-    rm $ASM
-}
+# requires gocc: go install github.com/kelindar/gocc/cmd/gocc@latest
 
-function build_avx512_amd64 {
-    SRC="simd_avx512_amd64.cpp"
-    ASM="simd_avx512_amd64.s"
-    clang-14 -S -mavx512vl -masm=intel $CLANG_OPTS -o $ASM $SRC
-    c2goasm -a -f $ASM ../$ASM
-    rm $ASM
-}
+#gocc simd_avx2_amd64.c --arch avx2 -O3 --package simd --output ../
+#gocc simd_neon_arm64.c --arch neon -O3 --package simd --output ../
+#gocc simd_apple_arm64.c --arch apple -O3 --package simd --output ../
 
-function build_neon_arm64 {
-    SRC="simd_neon_arm64.cpp"
-    ASM="simd_neon_arm64.s"
-    clang-14 -S -arch arm64 $CLANG_OPTS -o $ASM $SRC
-    c2goasm -a -f $ASM ../$ASM
-    rm $ASM
-}
-
-build_avx2_amd64
-#build_avx512_amd64
-#build_neon_arm64

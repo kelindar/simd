@@ -71,9 +71,9 @@ func rangeModes(fn func(mode string)) {
 func setMode(mode string) {
 	switch mode {
 	case "simd":
-		avx2 = true
+		hardware = avx2 || apple || neon
 	case "base":
-		avx2 = false
+		hardware = false
 	}
 }
 
